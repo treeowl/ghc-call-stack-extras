@@ -21,6 +21,7 @@ import GHC.Stack
 import GHC.Stack.Types
 import Unsafe.Coerce
 import Control.Exception
+import Control.DeepSeq
 import System.IO.Unsafe (unsafeDupablePerformIO)
 
 -- | Add a note to the current call stack. This note will be included
@@ -70,5 +71,5 @@ boom cs s f =
     in f cs'
   where
     s' = unsafeDupablePerformIO $
-          evaluate s `catch` \ (_ :: SomeException) ->
+          evaluate (force s) `catch` \ (_ :: SomeException) ->
                pure "!!!Exception occurred evaluating call stack note!!!"
