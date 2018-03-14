@@ -1,5 +1,5 @@
 name:                ghc-call-stack-extras
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Extra utilities for HasCallStack
 -- description:         
 homepage:            https://github.com/treeowl/ghc-call-stack-extras
