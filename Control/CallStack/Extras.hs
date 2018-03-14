@@ -20,13 +20,10 @@ module Control.CallStack.Extras
 import GHC.Stack
 import GHC.Stack.Types
 import Unsafe.Coerce
-import Control.Exception
-import Control.DeepSeq
-import System.IO.Unsafe (unsafeDupablePerformIO)
 
 -- | Add a note to the current call stack. This note will be included
--- in the stack trace in case of an error. In the event that the note
--- itself throws an exception, a placeholder will be shown instead.
+-- in the stack trace in case of an error. Be sure not to insert
+-- notes that throw errors, or stack traces will get confusing.
 --
 -- === Example
 --
@@ -66,10 +63,6 @@ boom :: CallStack -> String -> (CallStack -> a) -> a
 boom cs s f =
     let cs' = case popCallStack cs of
            EmptyCallStack -> EmptyCallStack
-           PushCallStack x y z -> PushCallStack (x ++ " (" ++ s' ++ ")\n    ") y z
+           PushCallStack x y z -> PushCallStack (x ++ " (" ++ s ++ ")\n    ") y z
            r@(FreezeCallStack _) -> r
     in f cs'
-  where
-    s' = unsafeDupablePerformIO $
-          evaluate (force s) `catch` \ (_ :: SomeException) ->
-               pure "!!!Exception occurred evaluating call stack note!!!"
