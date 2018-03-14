@@ -1,4 +1,4 @@
-{-# language RankNTypes, ScopedTypeVariables #-}
+{-# language RankNTypes, ScopedTypeVariables, Trustworthy #-}
 
 -----------------------------------------------------------------------------
 -- |
